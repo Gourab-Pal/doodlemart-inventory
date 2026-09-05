@@ -51,4 +51,14 @@ public class GlobalExceptionHandler {
                 "timestamp", OffsetDateTime.now()
         );
     }
+
+    @ExceptionHandler(ProductNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Map<String, Object> handleProductNotFound(ProductNotFoundException exception) {
+        return Map.of(
+                "message", "Unknown product received from upstream",
+                "exception", exception.getMessage(),
+                "timestamp", OffsetDateTime.now()
+        );
+    }
 }

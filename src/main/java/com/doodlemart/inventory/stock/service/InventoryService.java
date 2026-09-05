@@ -1,5 +1,6 @@
 package com.doodlemart.inventory.stock.service;
 
+import com.doodlemart.inventory.integration.product.ProductClient;
 import com.doodlemart.inventory.stock.dto.*;
 import com.doodlemart.inventory.stock.entity.Inventory;
 import com.doodlemart.inventory.stock.exception.InventoryNotFoundException;
@@ -13,12 +14,15 @@ import java.util.UUID;
 public class InventoryService {
 
     private final InventoryRepository inventoryRepository;
+    private final ProductClient productClient;
 
-    public InventoryService(InventoryRepository inventoryRepository) {
+    public InventoryService(InventoryRepository inventoryRepository, ProductClient productClient) {
         this.inventoryRepository = inventoryRepository;
+        this.productClient = productClient;
     }
 
     public InventoryResponse createInventory(InventoryCreateRequest request) {
+        productClient.verifyProductExists(request.productId());
         Inventory inventory = new Inventory(request.productId());
         Inventory savedInventory = inventoryRepository.save(inventory);
         return InventoryResponse.from(savedInventory);
