@@ -1,5 +1,6 @@
 package com.doodlemart.inventory.stock.exception;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -36,6 +37,16 @@ public class GlobalExceptionHandler {
     public Map<String, Object> handleIllegalState(IllegalStateException exception) {
         return Map.of(
                 "message", "This inventory operation is not allowed",
+                "exception", exception.getMessage(),
+                "timestamp", OffsetDateTime.now()
+        );
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public Map<String, Object> handleDataIntegrityViolation(DataIntegrityViolationException exception) {
+        return Map.of(
+                "message", "Inventory already exists for this product",
                 "exception", exception.getMessage(),
                 "timestamp", OffsetDateTime.now()
         );
