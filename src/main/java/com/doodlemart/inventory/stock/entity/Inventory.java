@@ -72,4 +72,32 @@ public class Inventory {
         this.totalQuantity = this.totalQuantity - quantityToRemove;
         this.updatedAt = OffsetDateTime.now();
     }
+
+    public void reserveStock(Integer quantityToReserve) {
+        if (quantityToReserve == null || quantityToReserve<=0) {
+            throw new IllegalArgumentException("You can reserve non-zero quantity only");
+        }
+
+        int availableQuantity = this.totalQuantity - this.reservedQuantity;
+
+        if(quantityToReserve>availableQuantity) {
+            throw new IllegalStateException("Can not reserve quantity more than what is available");
+        }
+
+        this.reservedQuantity = this.reservedQuantity + quantityToReserve;
+        this.updatedAt = OffsetDateTime.now();
+    }
+
+    public void releaseStock(Integer quantityToRelease) {
+        if (quantityToRelease == null || quantityToRelease<=0) {
+            throw new IllegalArgumentException("You can release non-zero quantity only");
+        }
+
+        if(quantityToRelease>this.reservedQuantity) {
+            throw new IllegalStateException("Can not release quantity more than what is reserved");
+        }
+
+        this.reservedQuantity = this.reservedQuantity - quantityToRelease;
+        this.updatedAt = OffsetDateTime.now();
+    }
 }

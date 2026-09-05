@@ -1,9 +1,6 @@
 package com.doodlemart.inventory.stock.controller;
 
-import com.doodlemart.inventory.stock.dto.AddStockRequest;
-import com.doodlemart.inventory.stock.dto.InventoryCreateRequest;
-import com.doodlemart.inventory.stock.dto.InventoryResponse;
-import com.doodlemart.inventory.stock.dto.RemoveStockRequest;
+import com.doodlemart.inventory.stock.dto.*;
 import com.doodlemart.inventory.stock.service.InventoryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -57,5 +54,29 @@ public class InventoryController {
             UUID productId
     ) {
         return inventoryService.removeStock(productId, request);
+    }
+
+    @PatchMapping("/products/{productId}/reserve-stock")
+    @ResponseStatus(HttpStatus.OK)
+    public InventoryResponse reserveStock(
+            @RequestBody
+            ReserveStockRequest request,
+
+            @PathVariable
+            UUID productId
+    ) {
+        return inventoryService.reserveStock(productId, request);
+    }
+
+    @PatchMapping("/products/{productId}/release-stock")
+    @ResponseStatus(HttpStatus.OK)
+    public InventoryResponse reserveStock(
+            @RequestBody
+            ReleaseStockRequest request,
+
+            @PathVariable
+            UUID productId
+    ) {
+        return inventoryService.releaseStock(productId, request);
     }
 }

@@ -1,9 +1,6 @@
 package com.doodlemart.inventory.stock.service;
 
-import com.doodlemart.inventory.stock.dto.AddStockRequest;
-import com.doodlemart.inventory.stock.dto.InventoryCreateRequest;
-import com.doodlemart.inventory.stock.dto.InventoryResponse;
-import com.doodlemart.inventory.stock.dto.RemoveStockRequest;
+import com.doodlemart.inventory.stock.dto.*;
 import com.doodlemart.inventory.stock.entity.Inventory;
 import com.doodlemart.inventory.stock.repository.InventoryRepository;
 import jakarta.transaction.Transactional;
@@ -43,6 +40,28 @@ public class InventoryService {
     public InventoryResponse removeStock(UUID productId, RemoveStockRequest request) {
         Inventory inventory = inventoryRepository.findByProductId(productId).orElseThrow();
         inventory.removeStock(request.quantityToRemove());
+        Inventory savedInventory = inventoryRepository.save(inventory);
+        return InventoryResponse.from(savedInventory);
+    }
+
+    @Transactional
+    public InventoryResponse reserveStock(
+            UUID productId,
+            ReserveStockRequest request
+    ) {
+        Inventory inventory = inventoryRepository.findByProductId(productId).orElseThrow();
+        inventory.reserveStock(request.quantityToReserve());
+        Inventory savedInventory = inventoryRepository.save(inventory);
+        return InventoryResponse.from(savedInventory);
+    }
+
+    @Transactional
+    public InventoryResponse releaseStock(
+            UUID productId,
+            ReleaseStockRequest request
+    ) {
+        Inventory inventory = inventoryRepository.findByProductId(productId).orElseThrow();
+        inventory.releaseStock(request.quantityToRelease());
         Inventory savedInventory = inventoryRepository.save(inventory);
         return InventoryResponse.from(savedInventory);
     }
