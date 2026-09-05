@@ -1,7 +1,6 @@
 package com.doodlemart.inventory.stock.entity;
 
 import jakarta.persistence.*;
-import org.springframework.dao.DataIntegrityViolationException;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
@@ -68,7 +67,7 @@ public class Inventory {
         int availableQuantity = this.totalQuantity - this.reservedQuantity;
 
         if(quantityToRemove>availableQuantity) {
-            throw new DataIntegrityViolationException("You don't have sufficient quantity to remove given amount of stock");
+            throw new IllegalStateException("You don't have sufficient quantity to remove given amount of stock");
         }
 
         this.totalQuantity = this.totalQuantity - quantityToRemove;

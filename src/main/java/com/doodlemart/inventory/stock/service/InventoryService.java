@@ -2,6 +2,7 @@ package com.doodlemart.inventory.stock.service;
 
 import com.doodlemart.inventory.stock.dto.*;
 import com.doodlemart.inventory.stock.entity.Inventory;
+import com.doodlemart.inventory.stock.exception.InventoryNotFoundException;
 import com.doodlemart.inventory.stock.repository.InventoryRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -24,13 +25,13 @@ public class InventoryService {
     }
 
     public InventoryResponse getInventoryByProductId(UUID productId) {
-        Inventory inventory = inventoryRepository.findByProductId(productId).orElseThrow();
+        Inventory inventory = inventoryRepository.findByProductId(productId).orElseThrow(()->new InventoryNotFoundException(productId));
         return InventoryResponse.from(inventory);
     }
 
     @Transactional
     public InventoryResponse addStock(UUID productId, AddStockRequest request) {
-        Inventory inventory = inventoryRepository.findByProductId(productId).orElseThrow();
+        Inventory inventory = inventoryRepository.findByProductId(productId).orElseThrow(()->new InventoryNotFoundException(productId));
         inventory.addStock(request.quantityToAdd());
         Inventory savedInventory = inventoryRepository.save(inventory);
         return InventoryResponse.from(savedInventory);
@@ -38,7 +39,7 @@ public class InventoryService {
 
     @Transactional
     public InventoryResponse removeStock(UUID productId, RemoveStockRequest request) {
-        Inventory inventory = inventoryRepository.findByProductId(productId).orElseThrow();
+        Inventory inventory = inventoryRepository.findByProductId(productId).orElseThrow(()->new InventoryNotFoundException(productId));
         inventory.removeStock(request.quantityToRemove());
         Inventory savedInventory = inventoryRepository.save(inventory);
         return InventoryResponse.from(savedInventory);
@@ -49,7 +50,7 @@ public class InventoryService {
             UUID productId,
             ReserveStockRequest request
     ) {
-        Inventory inventory = inventoryRepository.findByProductId(productId).orElseThrow();
+        Inventory inventory = inventoryRepository.findByProductId(productId).orElseThrow(()->new InventoryNotFoundException(productId));
         inventory.reserveStock(request.quantityToReserve());
         Inventory savedInventory = inventoryRepository.save(inventory);
         return InventoryResponse.from(savedInventory);
@@ -60,7 +61,7 @@ public class InventoryService {
             UUID productId,
             ReleaseStockRequest request
     ) {
-        Inventory inventory = inventoryRepository.findByProductId(productId).orElseThrow();
+        Inventory inventory = inventoryRepository.findByProductId(productId).orElseThrow(()->new InventoryNotFoundException(productId));
         inventory.releaseStock(request.quantityToRelease());
         Inventory savedInventory = inventoryRepository.save(inventory);
         return InventoryResponse.from(savedInventory);
@@ -71,7 +72,7 @@ public class InventoryService {
             UUID productId,
             ConfirmStockRequest request
     ) {
-        Inventory inventory = inventoryRepository.findByProductId(productId).orElseThrow();
+        Inventory inventory = inventoryRepository.findByProductId(productId).orElseThrow(()->new InventoryNotFoundException(productId));
         inventory.confirmStock(request.quantityToConfirm());
         Inventory savedInventory = inventoryRepository.save(inventory);
         return InventoryResponse.from(savedInventory);
