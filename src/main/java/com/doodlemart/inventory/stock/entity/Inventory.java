@@ -1,6 +1,7 @@
 package com.doodlemart.inventory.stock.entity;
 
 import jakarta.persistence.*;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
@@ -50,4 +51,25 @@ public class Inventory {
     public Integer getReservedQuantity() {return reservedQuantity;}
     public OffsetDateTime getCreatedAt() {return createdAt;}
     public OffsetDateTime getUpdatedAt() {return updatedAt;}
+
+    public void addStock(Integer quantityToAdd) {
+        if (quantityToAdd == null || quantityToAdd<=0) {
+            throw new IllegalArgumentException("You can add non-zero quantity only");
+        }
+        this.totalQuantity = this.totalQuantity + quantityToAdd;
+        this.updatedAt = OffsetDateTime.now();
+    }
+
+    public void removeStock(Integer quantityToRemove) {
+        if (quantityToRemove == null || quantityToRemove<=0) {
+            throw new IllegalArgumentException("You can remove non-zero quantity only");
+        }
+
+        if(quantityToRemove>this.totalQuantity) {
+            throw new DataIntegrityViolationException("You don't have sufficient quantity to remove given amount of stock");
+        }
+
+        this.totalQuantity = this.totalQuantity - quantityToRemove;
+        this.updatedAt = OffsetDateTime.now();
+    }
 }
