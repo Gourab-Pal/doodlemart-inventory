@@ -65,7 +65,9 @@ public class Inventory {
             throw new IllegalArgumentException("You can remove non-zero quantity only");
         }
 
-        if(quantityToRemove>this.totalQuantity) {
+        int availableQuantity = this.totalQuantity - this.reservedQuantity;
+
+        if(quantityToRemove>availableQuantity) {
             throw new DataIntegrityViolationException("You don't have sufficient quantity to remove given amount of stock");
         }
 

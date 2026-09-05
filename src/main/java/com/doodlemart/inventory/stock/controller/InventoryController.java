@@ -70,7 +70,7 @@ public class InventoryController {
 
     @PatchMapping("/products/{productId}/release-stock")
     @ResponseStatus(HttpStatus.OK)
-    public InventoryResponse reserveStock(
+    public InventoryResponse releaseStock(
             @RequestBody
             ReleaseStockRequest request,
 
