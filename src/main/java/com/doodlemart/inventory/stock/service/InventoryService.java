@@ -65,4 +65,15 @@ public class InventoryService {
         Inventory savedInventory = inventoryRepository.save(inventory);
         return InventoryResponse.from(savedInventory);
     }
+
+    @Transactional
+    public InventoryResponse confirmStock(
+            UUID productId,
+            ConfirmStockRequest request
+    ) {
+        Inventory inventory = inventoryRepository.findByProductId(productId).orElseThrow();
+        inventory.confirmStock(request.quantityToConfirm());
+        Inventory savedInventory = inventoryRepository.save(inventory);
+        return InventoryResponse.from(savedInventory);
+    }
 }

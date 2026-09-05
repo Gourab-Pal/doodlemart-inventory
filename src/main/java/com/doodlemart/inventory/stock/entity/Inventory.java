@@ -102,4 +102,18 @@ public class Inventory {
         this.reservedQuantity = this.reservedQuantity - quantityToRelease;
         this.updatedAt = OffsetDateTime.now();
     }
+
+    public void confirmStock(Integer quantityToConfirm) {
+        if (quantityToConfirm == null || quantityToConfirm<=0) {
+            throw new IllegalArgumentException("You can confirm non-zero quantity only");
+        }
+
+        if(quantityToConfirm>this.reservedQuantity) {
+            throw new IllegalStateException("Can not confirm quantity more than what is reserved");
+        }
+
+        this.reservedQuantity = this.reservedQuantity - quantityToConfirm;
+        this.totalQuantity = this.totalQuantity - quantityToConfirm;
+        this.updatedAt = OffsetDateTime.now();
+    }
 }

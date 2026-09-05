@@ -79,4 +79,16 @@ public class InventoryController {
     ) {
         return inventoryService.releaseStock(productId, request);
     }
+
+    @PatchMapping("/products/{productId}/confirm-stock")
+    @ResponseStatus(HttpStatus.OK)
+    public InventoryResponse confirmStock(
+            @RequestBody
+            ConfirmStockRequest request,
+
+            @PathVariable
+            UUID productId
+    ) {
+        return inventoryService.confirmStock(productId, request);
+    }
 }
