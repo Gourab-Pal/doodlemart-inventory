@@ -30,7 +30,7 @@ public class InventoryService {
 
     @Transactional
     public void createInventoryFromProductCreatedEvent(UUID productId) {
-        boolean inventoryAlreadyExists = inventoryRepository.findById(productId).isPresent();
+        boolean inventoryAlreadyExists = inventoryRepository.findByProductId(productId).isPresent();
         if(inventoryAlreadyExists) {return;}
         Inventory inventory = new Inventory(productId);
         inventoryRepository.save(inventory);
