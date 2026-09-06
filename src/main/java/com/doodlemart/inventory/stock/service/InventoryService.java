@@ -28,6 +28,14 @@ public class InventoryService {
         return InventoryResponse.from(savedInventory);
     }
 
+    @Transactional
+    public void createInventoryFromProductCreatedEvent(UUID productId) {
+        boolean inventoryAlreadyExists = inventoryRepository.findById(productId).isPresent();
+        if(inventoryAlreadyExists) {return;}
+        Inventory inventory = new Inventory(productId);
+        inventoryRepository.save(inventory);
+    }
+
     public InventoryResponse getInventoryByProductId(UUID productId) {
         Inventory inventory = inventoryRepository.findByProductId(productId).orElseThrow(()->new InventoryNotFoundException(productId));
         return InventoryResponse.from(inventory);
